@@ -127,3 +127,8 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Vagrant/Ubuntu
+.vagrant/
+vagrant-setup.txt
+ubuntu-bionic-18.04-cloudimg-console
