@@ -1,10 +1,11 @@
 from multiprocessing import get_logger
 import logging
+from .ConsoleHandler import ConsoleHandler
 
 def logger(level=logging.INFO):
     logger = get_logger()
     logger.setLevel(level)
-    handler = logging.StreamHandler()
+    handler = ConsoleHandler()
     handler.setFormatter(logging.Formatter(
         "%(levelname)s: %(asctime)s - %(process)s - %(message)s"))
     logger.addHandler(handler)

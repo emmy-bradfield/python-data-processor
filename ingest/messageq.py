@@ -3,26 +3,25 @@ from multiprocessing.managers import BaseManager
 from queue import Empty
 from typing import Any, List
 
-from ingest.debugging import app_logger as log
+from .debugging import app_logger as log
 
 class QueueWrapper(object):
     
     def __init__(self, name: str, q: Queue = None, prevent_writes: Event = None):
-        self.name = name
-        self.q = q or Queue()
-        self._prevent_writes = prevent_writes or Event()
+        self.name: str = name
+        self.q: QueueManager = q or Queue()
+        self._prevent_writes: Event = prevent_writes or Event()
 
-    def get(self) -> Any:
+    def get(self):
         if self.is_drained:
             return 'STOP'
-        
         try:
             return self.q.get()
-        except:
+        except Exception as ex:
             log.info('q.get() interupted')
             return 'STOP'
     
-    def put(self, obj: object) -> Any:
+    def put(self, obj: object):
         if self.is_writable:
             log.debug('adding message to queue')
             self.q.put(obj)
@@ -36,16 +35,16 @@ class QueueWrapper(object):
         self._prevent_writes.set()
     
     @property
-    def is_writable(self) -> bool:
-        return not self._prevent_writes.is_set
+    def is_writable(self):
+        return not self._prevent_writes.is_set()
     
     @property
-    def is_drained(self) -> bool:
+    def is_drained(self):
         return not self.is_writable and self.empty
     
     @property
-    def empty(self) -> bool :
-        return self.q.empty
+    def empty(self):
+        return self.q.empty()
     
 class QueueManager(BaseManager):
     pass
