@@ -51,7 +51,6 @@ class Worker(Process):
         for msg in iter(self.iq.get, 'STOP'):
             if self.cache(processor.process_message(msg)) == self._cache_size:
                 self.flush_cache
-        log.info(msg)
         self.flush_cache()
         exit(0)
         
@@ -73,6 +72,7 @@ class Saver(Process):
         for msg in iter(self.q.get, 'STOP'):
             log.info(msg)
             self.persist_fn(self.client, *msg )
+        exit(0)
             
 def start_processes(proc_num: int, proc: Process, proc_args: List[object]):
     log.info(f"initialising {proc_num} worker process(es)")
