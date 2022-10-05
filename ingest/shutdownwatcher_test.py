@@ -3,7 +3,7 @@ import sched
 import time
 import os
 import pytest
-from ingest.shutdown import ShutdownWatcher
+from ingest.shutdownwatcher import ShutdownWatcher
 from unittest.mock import MagicMock
 
 def teardown_function():

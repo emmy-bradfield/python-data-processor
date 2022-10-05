@@ -6,6 +6,7 @@ import spacy
 from .debugging import app_logger as log
 from .models import Post, ProcessedPost
 
+
 class DataProcessor():
 
     def __init__(self):
