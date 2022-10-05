@@ -15,7 +15,7 @@ def get_data(csvfilepath: str = "/tmp/all_the_news/all-the-news-2-1.csv"):
     '''
     with open(csvfilepath) as f:
         for row in csv.reader(f):
-            yield {'content': row[8], 'publication': row[11]}
+            yield {'content': row[6], 'publication': row[9]}
 
 
 async def upload_to_uri(uri: str, record_count):
