@@ -2,7 +2,7 @@ from multiprocessing import get_logger
 import logging
 from .ConsoleHandler import ConsoleHandler
 
-def logger(level=logging.INFO):
+def logger(level=logging.INFo):
     logger = get_logger()
     logger.setLevel(level)
     handler = ConsoleHandler()

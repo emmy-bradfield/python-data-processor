@@ -14,10 +14,18 @@ class ProcessedPost(BaseModel):
     
     @property
     def pub_key(self):
-        return None
+        return self.publication.strip().lower()
     
-    def transform_for_database(self, top_n=200):
-        return None
+    def _transform_for_database(self, top_n: int):
+        for word, count in self.entities.most_common(top_n):
+            yield self.pub_key, 'ent', str(hash(word)), {'word': word, 'count': count}
+        yield self.pub_key, None, None, {'count': self.article_count}
+    
+    def transform_for_database(self, top_n=2000):
+        return list(self._transform_for_database(top_n))
     
     def __add__(self, other):
+        self.article_count += 1
+        self.publication = other.publication
+        self.entities += other.entities
         return self
