@@ -1,28 +1,37 @@
-from importlib.metadata import entry_points
 from setuptools import setup, find_packages
 
 setup(
-    name="Ingestion",
-    version="0.1.0",
-    author="Emily Bradfield",
-    author_email="emily-bradfield@outlook.com",
-    description="a data ingestion processing tool created from code supplied by cloud academy as part of my training",
-    keywords="ingestion data processing",
-    url="http://cloudadademy.com",
+    name="ingest",
+    version="0.0.1",
+    author="Ben Lambert",
+    author_email="supprt@cloudacademy.com",
+    description="A demo application created to accompany a Python course.",
+    keywords="learn python cloud academy",
+    url="http://cloudacademy.com",
     packages=find_packages(),
     entry_points={"console_scripts": [
-        "ingestiond=ingest.backend:main",
+        "ingestd=ingest.backend:main",
+        "getdataset=simulator.download:download_and_extract",
+        "uploaddataset=simulator.upload:main",
     ]},
     install_requires=[
-        "spacy==3.4",
+        "fastapi==0.58.0",
+        "google-cloud-firestore==1.7.0",
+        "pydantic==1.5.1",
+        "uvicorn==0.11.5",
+        "gunicorn==20.0.4",
+        "passlib==1.7.2",
+        "bcrypt==3.1.7",
+        "PyJWT==1.7.1",
+        "spacy==2.3.0",
         "spacy-lookups-data==0.3.2",
-        "fastapi==0.60.1",
-        "uvicorn==0.11.7"
+        "typer==0.3.0",
+        "httpx==0.13.3",
+        "supervisor==4.2.0",
+        "schedule==0.6.0",
     ],
-    extras_require={
-        "dev" : [
-            "pytest==5.4.3",
-        ]
-    }
-    
+    extras_require={"dev": [
+        "pytest==5.4.3",
+    ]}
+
 )
