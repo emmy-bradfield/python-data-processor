@@ -1,5 +1,6 @@
 from collections import Counter
 from typing import Dict
+from ingest.models import ProcessedPost
 
 import spacy
 
@@ -18,7 +19,12 @@ class DataProcessor():
         return Counter(t)
     
     def process(self, text: str) -> Dict:
-        return {'entities': self.entities(self.npl(text))}
+        return {'entities': self.entities(self.nlp(text))}
     
     def process_message(self, post):
-        return None
+        return ProcessedPost(
+            **{
+                **post.dict(),
+                **self.process(post.content)
+            }
+        )
