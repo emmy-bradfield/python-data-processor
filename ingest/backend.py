@@ -83,7 +83,7 @@ def register_shutdown_handlers(queues, processes):
 
 def main():
     pcount = (os.cpu_count() -1) or 1
-    parse_arguments = [
+    parser_arguments = [
         ('--iproc_num', {'help': 'number of input queue workers', 'default': pcount, 'type': int})
         ('--oproc_num', {'help': 'number of output queue workers', 'default': pcount, 'type': int})
         ('--iport', {'help': 'input queue port cross proc messaging', 'default': 50_000, 'type': int})
@@ -91,3 +91,35 @@ def main():
         ('--agg_cache_size', {'help': 'aggregator cache size', 'default': 25_000, 'type': int})
     ]
     
+    import argparse
+    parser = argparse.ArgumentParser()
+    for name, args in parser_arguments:
+        parser.add_argument(name, **args)
+        
+    args = parser.parse_args()
+    
+    iproc_num = args.iproc_num
+    oproc_num = args.oproc_num
+    iport = args.iport
+    cache_sz = args.agg_cache_size
+    
+    if args.no_persist:
+        persistable = (None, persist_no_op)
+    else: 
+        persistable = (get_database_client(), persist)
+        
+    iq = QueueWrapper(name='iqueue')
+    oq = QueueWrapper(name='oqueue')
+    
+    register_manager("iqueue", iq)
+    iserver = create_queue_manager(iport)
+    iserver.start()
+    
+    iprocs = start_processes(iproc_num, Worker, [iq, oq, cache_sz])
+    oprocs = start_processes(oproc_num, Saver, [oq, *persistable]) 
+    
+    register_shutdown_handlers([iq, oq], [iprocs, oprocs])
+    
+    with ShutdownWatcher() as watcher:
+        watcher.serve_forever()
+    exit(0)
