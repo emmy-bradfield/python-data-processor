@@ -51,7 +51,6 @@ class Worker(Process):
         signal.signal(signal.SIGTERM, self.shutdown)
         processor = DataProcessor()
         for msg in iter(self.iq.get, 'STOP'):
-            log.info(msg)
             if self.cache(processor.process_message(msg)) == self._cache_size:
                 self.flush_cache()
         self.flush_cache()
@@ -75,7 +74,6 @@ class Saver(Process):
     def run(self):
         signal.signal(signal.SIGTERM, self.shutdown)
         for msg in iter(self.q.get, 'STOP'):
-            log.info(msg)
             self.persist_fn(self.client, *msg)
         exit(0)
 
