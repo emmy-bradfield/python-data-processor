@@ -16,6 +16,8 @@ setup(
     install_requires=[
         "spacy==3.4",
         "spacy-lookups-data==0.3.2",
+        "fastapi==0.60.1",
+        "uvicorn==0.11.7"
     ],
     extras_require={
         "dev" : [

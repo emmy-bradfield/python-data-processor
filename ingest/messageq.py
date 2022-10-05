@@ -12,13 +12,13 @@ class QueueWrapper(object):
         self.q: QueueManager = q or Queue()
         self._prevent_writes: Event = prevent_writes or Event()
 
-    def get(self):
+    def get(self) -> Any:
         if self.is_drained:
             return 'STOP'
         try:
             return self.q.get()
         except Exception as ex:
-            log.info('q.get() interupted')
+            log.info(f'q.get() interupted')
             return 'STOP'
     
     def put(self, obj: object):

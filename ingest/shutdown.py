@@ -7,7 +7,7 @@ class ShutdownWatcher:
     def __init__(self):
         self.should_continue = True
         
-        for s in [signal.SIGTERM, signal.SIGINT]:
+        for s in [signal.SIGINT, signal.SIGTERM]:
             signal.signal(s, self.exit)
     
     def __enter__(self):
@@ -17,7 +17,7 @@ class ShutdownWatcher:
         self.exit()
     
     def serve_forever(self):
-        while self.should_continue == True:
+        while self.should_continue:
             time.sleep(0.1)
     
     def exit(self, *args, **kwargs):
