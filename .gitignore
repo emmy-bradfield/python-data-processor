@@ -132,3 +132,6 @@ dmypy.json
 .vagrant/
 vagrant-setup.txt
 ubuntu-bionic-18.04-cloudimg-console
+
+#GCloud
+gcloud-setup.txt
